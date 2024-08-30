@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "components/Dice.tsxx", "components/Dice.js", "app/(tabs)/index.js"  ]
 }
