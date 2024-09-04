@@ -11,8 +11,11 @@ import Wrapper from "@/components/Wrapper";
 import MenuIcon from "../../assets/images/menu.png";
 import { deviceHeight, deviceWidth } from "@/constants/Scalling";
 import Dice from "@/components/Dice";
+import VerticalPath from "@/components/VerticalPath";
+import HorizontalPath from "@/components/HorizontalPath";
 import Pocket from "@/components/Pocket";
 import { Colors } from "@/constants/Colors";
+import { Plot1Data, Plot2Data, Plot3Data, Plot4Data } from "@/helpers/PlotData";
 
 export default function HomeScreen() {
   return (
@@ -30,7 +33,21 @@ export default function HomeScreen() {
         <View style={styles.ludoBoard}>
           <View style={styles.plotContainer}>
             <Pocket color={Colors.green} player={2} />
+            <VerticalPath cells={Plot2Data} color={Colors.yellow} />
+            <Pocket color={Colors.yellow} player={3} />
           </View>
+
+          <View style={styles.pathContainer}>
+            <HorizontalPath cells={Plot1Data} color={Colors.yellow} />
+            <HorizontalPath cells={Plot3Data} color={Colors.blue} />
+          </View>
+
+          <View style={styles.plotContainer}>
+            <Pocket color={Colors.red} player={1} />
+            <VerticalPath cells={Plot4Data} color={Colors.yellow} />
+            <Pocket color={Colors.blue} player={4} />
+          </View>
+
         </View>
 
         <View style={styles.flexRow}>
@@ -70,4 +87,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#ccc',
   },
+  pathContainer: {
+    flexDirection: "row",
+    width: "100%",
+    height: "20%",
+    justifyContent: "space-between",
+    backgroundColor: "#1E5162"
+  }
 });

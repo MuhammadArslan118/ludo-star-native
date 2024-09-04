@@ -8,7 +8,7 @@ import DiceRoll from "@/assets/animation/diceroll.json"
 import Arrow from "@/assets/images/arrow.png";
 
 const Dice = React.memo(({ color, rotate, player, data }) => {
-  const diceNo = 2;
+  const diceNo = 3;
   const pileIcon = BackgroundImage.GetImage(color);
   const diceIcon = BackgroundImage.GetImage(diceNo);
   const arrowAnim = useRef(new Animated.Value(0)).current;
