@@ -13,6 +13,7 @@ import { deviceHeight, deviceWidth } from "@/constants/Scalling";
 import Dice from "@/components/Dice";
 import VerticalPath from "@/components/VerticalPath";
 import HorizontalPath from "@/components/HorizontalPath";
+import FourTriagles from "@/components/FourTriagles";
 import Pocket from "@/components/Pocket";
 import { Colors } from "@/constants/Colors";
 import { Plot1Data, Plot2Data, Plot3Data, Plot4Data } from "@/helpers/PlotData";
@@ -38,13 +39,14 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.pathContainer}>
-            <HorizontalPath cells={Plot1Data} color={Colors.yellow} />
+            <HorizontalPath cells={Plot1Data} color={Colors.green} />
+            <FourTriagles />
             <HorizontalPath cells={Plot3Data} color={Colors.blue} />
           </View>
 
           <View style={styles.plotContainer}>
             <Pocket color={Colors.red} player={1} />
-            <VerticalPath cells={Plot4Data} color={Colors.yellow} />
+            <VerticalPath cells={Plot4Data} color={Colors.red} />
             <Pocket color={Colors.blue} player={4} />
           </View>
 
