@@ -4,15 +4,71 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Animated, Easing } fro
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from 'lottie-react-native';
 import DiceRoll from "@/assets/animation/diceroll.json"
+import { playSound } from "@/helpers/SoundUtility"
 
 import Arrow from "@/assets/images/arrow.png";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentPlayerChance, selectDiceNo, selectDiceRolled } from "@/redux/reducers/gameSelector";
+import { enablePileSelection, updateDiceNo, updatePlayerChance } from "@/redux/reducers/gameSlice";
 
 const Dice = React.memo(({ color, rotate, player, data }) => {
-  const diceNo = 3;
+  const dispatch = useDispatch()
+  const currentPlayerChance = useSelector(selectCurrentPlayerChance)
+  const isDiceRolled = useSelector(selectDiceRolled)
+  const diceNo = useSelector(selectDiceNo);
+  const playerPieces = useSelector(state => state.game[`player${currentPlayerChance}`]);
+  console.log(diceNo, "diceNodiceNodiceNo");
+
   const pileIcon = BackgroundImage.GetImage(color);
   const diceIcon = BackgroundImage.GetImage(diceNo);
   const arrowAnim = useRef(new Animated.Value(0)).current;
   const [diceRolling, setDiceRolling] = useState(false);
+
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+  const handleDicePress = async () => {
+    const newDiceNo = Math.floor(Math.random() * 6) + 1;
+    // const newDiceNo = 6;
+    playSound("dice_roll")
+    setDiceRolling(true)
+    await delay(800)
+    dispatch(updateDiceNo({ diceNo: newDiceNo }))
+    setDiceRolling(false)
+
+    const isAnyPieceAlive = data?.findIndex(i => i.pos != 0 && i.pos != 57)
+    const isAnyPieceLocked = data?.findIndex(i => i.pos == 0)
+
+    if (isAnyPieceAlive) {
+      if (diceNo === 6) {
+        dispatch(enablePileSelection({ playerNo: player }))
+      } else {
+        let chancePlayer = player + 1;
+        if (chancePlayer > 4) {
+          chancePlayer = 1
+        }
+        await delay(600)
+        dispatch(updatePlayerChance({ chancePlayer: chancePlayer }))
+      }
+    } else {
+      const canMov = playerPieces.some(pile => pile.travelCount + newDiceNo <= 57 && pile.pos != 0);
+      if ((!canMov && diceNo == 6 && isAnyPieceLocked == -1) ||
+        (!canMov && diceNo != 6 && isAnyPieceLocked != -1) ||
+        (!canMov && diceNo != 6 && isAnyPieceLocked == -1)
+
+      ) {
+        let chancePlayer = player + 1;
+        if (chancePlayer > 4) {
+          chancePlayer = 1
+        }
+        await delay(600);
+        dispatch(updatePlayerChance({ chancePlayer: chancePlayer }));
+        return
+      }
+      if (newDiceNo == 6) {
+        enablePileSelection({ playerNo: player })
+      }
+      dispatch(enablePileSelection({ playerNo: player }))
+    }
+  }
 
   useEffect(() => {
     const animateArrow = () => {
@@ -36,6 +92,7 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
     animateArrow()
   }, []);
 
+
   return (
     <View
       style={[styles.flexRow, { transform: [{ scaleX: rotate ? -1 : 1 }] }]}
@@ -45,7 +102,6 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
           // start={styles.linearGradient}
           colors={['#0052be', '#5f9fcb', '#97c6c9']}
           start={{ x: 0, y: 0.5 }}
-          wwwww
           end={{ x: 1, y: 0.5 }}>
           <View style={styles.pileContainer}>
             <Image source={pileIcon} style={styles.pileIcon} />
@@ -61,19 +117,26 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
           end={{ x: 1, y: 0.5 }}
         >
           <View style={styles.diceContainer}>
-            <TouchableOpacity>
-              <Image source={diceIcon} style={styles.dice} />
-            </TouchableOpacity>
+            {currentPlayerChance === player && !diceRolling &&
+              <TouchableOpacity
+                disabled={isDiceRolled}
+                activeOpacity={0.4}
+                onPress={handleDicePress}
+              >
+                <Image source={diceIcon} style={styles.dice} />
+              </TouchableOpacity>
+
+            }
           </View>
         </LinearGradient>
       </View>
-      {diceRolling &&
+      {currentPlayerChance === player && isDiceRolled &&
         <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
           <Image source={Arrow} style={{ width: 50, height: 30 }} />
         </Animated.View>
       }
 
-      {diceRolling &&
+      {currentPlayerChance === player && diceRolling &&
         <LottieView
           source={DiceRoll}
           style={styles.rollingDice}

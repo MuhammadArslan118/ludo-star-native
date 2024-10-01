@@ -55,7 +55,7 @@ export default function HomeScreen() {
       blinkAnimation.start()
       const timout = setTimeout(() => {
         setShowStarImage(false)
-      }, 3000);
+      }, 2500);
       return () => {
         blinkAnimation.stop()
         clearTimeout(timout)
@@ -71,15 +71,15 @@ export default function HomeScreen() {
 
       <View style={styles.container}>
         <View style={styles.flexRow}>
-          <Dice color={Colors.green} />
-          <Dice color={Colors.yellow} rotate />
+          <Dice color={Colors.green} player={2} data={player2} />
+          <Dice color={Colors.yellow} rotate player={3} data={player3} />
         </View>
 
         <View style={styles.ludoBoard}>
           <View style={styles.plotContainer}>
-            <Pocket color={Colors.green} player={2} />
+            <Pocket color={Colors.green} player={2} data={player2} />
             <VerticalPath cells={Plot2Data} color={Colors.yellow} />
-            <Pocket color={Colors.yellow} player={3} />
+            <Pocket color={Colors.yellow} player={3} data={player3} />
           </View>
 
           <View style={styles.pathContainer}>
@@ -89,16 +89,16 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.plotContainer}>
-            <Pocket color={Colors.red} player={1} />
+            <Pocket color={Colors.red} player={1} data={player1} />
             <VerticalPath cells={Plot4Data} color={Colors.red} />
-            <Pocket color={Colors.blue} player={4} />
+            <Pocket color={Colors.blue} player={4} data={player4} />
           </View>
 
         </View>
 
         <View style={styles.flexRow}>
-          <Dice color={Colors.red} />
-          <Dice color={Colors.blue} rotate />
+          <Dice color={Colors.red} player={1} data={player1} />
+          <Dice color={Colors.blue} rotate player={4} data={player4} />
         </View>
       </View>
 
@@ -107,7 +107,7 @@ export default function HomeScreen() {
           width: deviceWidth * 0.5,
           height: deviceHeight * 0.5,
           position: "absolute",
-          opacity: 1
+          opacity
         }}
       />}
     </Wrapper>

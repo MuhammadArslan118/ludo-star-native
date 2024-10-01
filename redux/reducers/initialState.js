@@ -36,7 +36,7 @@ export const initialState = {
     pileSelectionPlayer: -1,
     callSelectionPlayer: -1,
     touchDiceBlock: false,
-    currentPosition: [],
+    currentPositions: [],
     fireworks: false,
     winner: null
 }
