@@ -6,24 +6,25 @@ import { ArrowSpots, SafeSpots, StarSpots } from '@/helpers/PlotData'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentPosition } from '@/redux/reducers/gameSelector'
+import { selectCurrentPositions } from '@/redux/reducers/gameSelector'
+import { handleForwardThunk } from '@/redux/reducers/gameAction'
 
-const Cell = ({ color, index, id }) => {
+const Cell = ({ id, color }) => {
     const dispatch = useDispatch()
-    const plottedPieces = useSelector(selectCurrentPosition)
-
+    const plottedPieces = useSelector(selectCurrentPositions)
     const isSafeSpot = useMemo(() => SafeSpots.includes(id), [id])
     const isStarSpot = useMemo(() => StarSpots.includes(id), [id])
     const isArrowSpot = useMemo(() => ArrowSpots.includes(id), [id])
 
     const piecesAtPosition = useMemo(
-        () => plottedPieces?.filter(item => item == id),
+        () => plottedPieces?.filter(item => item.pos == id),
         [plottedPieces, id],
     )
 
-    const handlePress = useCallback((playerNo, pieceId) => {
-
-    }, [dispatch, id])
+    const handlePress = useCallback(
+        (playerNo, pieceId) => {
+            dispatch(handleForwardThunk(playerNo, pieceId, id))
+        }, [dispatch, id])
 
     return (
         <View style={[styles.container, {

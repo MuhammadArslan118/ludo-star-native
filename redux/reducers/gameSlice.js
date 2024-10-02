@@ -35,13 +35,12 @@ const gameSlice = createSlice({
             state.isDiceRolled = false;
         },
         updatePlayerPieceValue: (state, action) => {
-            console.log(action, "action");
 
             const { playerNo, pieceId, pos, travelCount } = action.payload;
             const playerPieces = state[playerNo];
             const piece = playerPieces.find(p => p.id === pieceId)
-
             state.pileSelectionPlayer = -1;
+
             if (piece) {
                 piece.pos = pos;
                 piece.travelCount = travelCount;
@@ -61,7 +60,6 @@ const gameSlice = createSlice({
                     }
                 }
             }
-            console.log(state, "state");
 
         }
     }

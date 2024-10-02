@@ -18,13 +18,16 @@ import FourTriagles from "@/components/FourTriagles";
 import Pocket from "@/components/Pocket";
 import { Colors } from "@/constants/Colors";
 import { Plot1Data, Plot2Data, Plot3Data, Plot4Data } from "@/helpers/PlotData";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectDiceTouch, selectPlayer1, selectPlayer2, selectPlayer3, selectPlayer4 } from "@/redux/reducers/gameSelector";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import StarGame from "@/assets/images/start.png"
+import { resetGame } from "@/redux/reducers/gameSlice";
+import { playSound } from "@/helpers/SoundUtility";
 
 export default function HomeScreen() {
+  const dispatch = useDispatch()
   const isFocused = useIsFocused()
   const player1 = useSelector(selectPlayer1)
   const player2 = useSelector(selectPlayer2)
@@ -39,6 +42,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (isFocused) {
+      dispatch(resetGame())
       setShowStarImage(true)
       const blinkAnimation = Animated.loop(Animated.sequence([
         Animated.timing(opacity, {
@@ -61,6 +65,8 @@ export default function HomeScreen() {
         clearTimeout(timout)
       }
     }
+
+
   }, [isFocused])
 
   return (
@@ -70,7 +76,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <View style={styles.container}>
-        <View style={styles.flexRow}>
+        <View style={styles.flexRow} pointerEvents={isDiceTouch ? "none" : "auto"}>
           <Dice color={Colors.green} player={2} data={player2} />
           <Dice color={Colors.yellow} rotate player={3} data={player3} />
         </View>
@@ -96,7 +102,7 @@ export default function HomeScreen() {
 
         </View>
 
-        <View style={styles.flexRow}>
+        <View style={styles.flexRow} pointerEvents={isDiceTouch ? "none" : "auto"}>
           <Dice color={Colors.red} player={1} data={player1} />
           <Dice color={Colors.blue} rotate player={4} data={player4} />
         </View>
@@ -133,7 +139,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignSelf: 'center',
     padding: 10,
-    backgroundColor: 'red'
+    // backgroundColor: 'red'
   },
   plotContainer: {
     width: '100%',

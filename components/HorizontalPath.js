@@ -5,8 +5,6 @@ import Cell from '../components/Cell'
 
 
 const HorizontalPath = ({ cells, color }) => {
-    console.log(cells, color);
-
     const groupedCells = useMemo(() => {
         const groups = []
         for (let i = 0; i < cells.length; i += 6) {

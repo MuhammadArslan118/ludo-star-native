@@ -17,7 +17,6 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
   const isDiceRolled = useSelector(selectDiceRolled)
   const diceNo = useSelector(selectDiceNo);
   const playerPieces = useSelector(state => state.game[`player${currentPlayerChance}`]);
-  console.log(diceNo, "diceNodiceNodiceNo");
 
   const pileIcon = BackgroundImage.GetImage(color);
   const diceIcon = BackgroundImage.GetImage(diceNo);
@@ -27,6 +26,7 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
   const handleDicePress = async () => {
     const newDiceNo = Math.floor(Math.random() * 6) + 1;
+    console.log(newDiceNo, "newDiceNo");
     // const newDiceNo = 6;
     playSound("dice_roll")
     setDiceRolling(true)
@@ -36,9 +36,10 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
 
     const isAnyPieceAlive = data?.findIndex(i => i.pos != 0 && i.pos != 57)
     const isAnyPieceLocked = data?.findIndex(i => i.pos == 0)
+    console.log(isAnyPieceAlive, "isAnyPieceAlive == -1");
 
-    if (isAnyPieceAlive) {
-      if (diceNo === 6) {
+    if (isAnyPieceAlive == -1) {
+      if (diceNo == 6) {
         dispatch(enablePileSelection({ playerNo: player }))
       } else {
         let chancePlayer = player + 1;
@@ -64,7 +65,7 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
         return
       }
       if (newDiceNo == 6) {
-        enablePileSelection({ playerNo: player })
+        dispatch(enablePileSelection({ playerNo: player }))
       }
       dispatch(enablePileSelection({ playerNo: player }))
     }
@@ -130,7 +131,7 @@ const Dice = React.memo(({ color, rotate, player, data }) => {
           </View>
         </LinearGradient>
       </View>
-      {currentPlayerChance === player && isDiceRolled &&
+      {currentPlayerChance === player && !isDiceRolled &&
         <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
           <Image source={Arrow} style={{ width: 50, height: 30 }} />
         </Animated.View>

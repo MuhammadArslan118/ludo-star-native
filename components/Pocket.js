@@ -10,8 +10,6 @@ const Pocket = React.memo(({ color, player, data }) => {
     const dispatch = useDispatch()
     const handlePress = async (value) => {
         let playerNo = value?.id[0]
-        console.log(value, "playeroooooooooooooo");
-
         switch (playerNo) {
             case "A":
                 playerNo = "player1"
@@ -27,7 +25,6 @@ const Pocket = React.memo(({ color, player, data }) => {
                 break;
 
         }
-        console.log(playerNo, "playerNoplayerNo");
 
         dispatch(updatePlayerPieceValue({
             playerNo: playerNo,

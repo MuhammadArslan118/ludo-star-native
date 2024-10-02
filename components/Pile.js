@@ -13,6 +13,7 @@ const Pile = ({ color, cell, player, onPress, pieceId }) => {
     const diceNo = useSelector(selectDiceNo)
     const playerPieces = useSelector(state => state.game[`player${player}`])
 
+
     const pileImage = BackgroundImage.GetImage(color);
     const rotation = useRef(new Animated.Value(0)).current;
 
@@ -26,6 +27,7 @@ const Pile = ({ color, cell, player, onPress, pieceId }) => {
     )
 
     const isForwardAble = useCallback(() => {
+        console.log(pieceId, "playerPieces");
         const piece = playerPieces?.find(item => item.id === pieceId)
         return piece && piece.travelCount + diceNo <= 57
     }, [playerPieces, pieceId, diceNo])
@@ -47,7 +49,6 @@ const Pile = ({ color, cell, player, onPress, pieceId }) => {
         inputRange: [0, 1],
         outputRange: ["0deg", "360deg"]
     }), [rotation])
-
 
 
     return (
